@@ -1,0 +1,12 @@
+.env
+.env.*
+node_modules/
+npm-debug.log
+yarn-error.log
+tests/
+*.test.js
+.git
+.gitignore
+README.md
+.vscode/
+.idea/
