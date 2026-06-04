@@ -1,0 +1,27 @@
+{
+    "addon": {
+        "addonName": "aws-ebs-csi-driver",
+        "clusterName": "cloudaura-eks-cluster",
+        "status": "DEGRADED",
+        "addonVersion": "v1.60.1-eksbuild.1",
+        "health": {
+            "issues": [
+                {
+                    "code": "InsufficientNumberOfReplicas",
+                    "message": "The add-on is unhealthy because all deployments have all pods unscheduled 0/4 nodes are available: 2 Too many pods, 2 node(s) had untolerated taint(s). no new claims to deallocate, preemption: 0/4 nodes are available: 2 No preemption victims found for incoming pod, 2 Preemption is not helpful for scheduling."
+                }
+            ]
+        },
+        "addonArn": "arn:aws:eks:eu-north-1:351849325312:addon/cloudaura-eks-cluster/aws-ebs-csi-driver/00cf45e7-2e63-0498-85b9-690c101de2ac",
+        "createdAt": "2026-06-03T09:46:57.969000+05:00",
+        "modifiedAt": "2026-06-03T09:47:17.558000+05:00",
+        "tags": {
+            "Environment": "staging",
+            "karpenter.sh/discovery": "cloudaura-eks-cluster",
+            "ManagedBy": "Terraform"
+        },
+        "namespaceConfig": {
+            "namespace": "kube-system"
+        }
+    }
+}
