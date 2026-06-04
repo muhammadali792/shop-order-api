@@ -1,0 +1,44 @@
+name: Build and Push Microservices
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'auth-service/**'
+      - 'product-service/**'
+      - 'order-service/**'
+      - 'notif-service/**'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    strategy:
+      matrix:
+        service:
+          - { folder: "auth-service", ecr_repo: "auth-repo" }
+          - { folder: "product-service", ecr_repo: "product-repo" }
+          - { folder: "order-service", ecr_repo: "order-repo" }
+          - { folder: "notif-service", ecr_repo: "notif-repo" }
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build, Tag, and Push
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          cd ${{ matrix.service.folder }}
+          docker build -t $ECR_REGISTRY/${{ matrix.service.ecr_repo }}:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/${{ matrix.service.ecr_repo }}:$IMAGE_TAG
