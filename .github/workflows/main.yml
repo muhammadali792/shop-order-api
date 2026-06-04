@@ -1,4 +1,4 @@
-name: Build and Push Microservices
+name: Build
 
 on:
   push:
