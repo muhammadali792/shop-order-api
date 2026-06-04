@@ -1,35 +1,17 @@
-# --- Stage 1: Build Stage ---
+# --- Stage 1: Build ---
 FROM node:20-alpine AS builder
-
-# Working directory set karein
 WORKDIR /app
-
-# Dependencies copy aur install karein (Caching ke liye)
 COPY package*.json ./
 RUN npm ci
-
-# Source code copy karein
 COPY . .
 
-# Build process (Agar TypeScript hai to npm run build)
-RUN npm run build
-
-# --- Stage 2: Production Stage ---
+# --- Stage 2: Production ---
 FROM node:20-alpine AS runner
-
-# Security: Non-root user banayein
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
-
 WORKDIR /app
-
-# Sirf production dependencies install karein
 COPY package*.json ./
 RUN npm ci --only=production
-
-# Builder stage se sirf zaroori files (dist aur node_modules) uthayein
-COPY --from=builder /app/dist ./dist
-
-# Application run karne ka command
+COPY --from=builder /app/src ./src
 EXPOSE 3000
-CMD ["node", "dist/main.js"]
+CMD ["node", "src/app.js"]
