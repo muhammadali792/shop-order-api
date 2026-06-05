@@ -1,4 +1,6 @@
-# --- Stage 1: Builder ---
+# ─────────────────────────────────────────────
+# Stage 1: Builder
+# ─────────────────────────────────────────────
 FROM python:3.12-slim AS builder
 
 RUN apt-get update && \
@@ -11,8 +13,10 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# --- Stage 2: Runner ---
-FROM python:3.12-slim AS runner
+# ─────────────────────────────────────────────
+# Stage 2: Runner
+# ─────────────────────────────────────────────
+FROM gcr.io/distroless/python3-debian12 AS runner
 
 WORKDIR /app
 
@@ -20,16 +24,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Security: Non-root user
-RUN groupadd -r appgroup && \
-    useradd -r -g appgroup appuser
-
 COPY --from=builder /opt/venv /opt/venv
 COPY . .
 
-RUN chown -R appuser:appgroup /app
-
-USER appuser
-
 EXPOSE 8000
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/opt/venv/bin/uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
