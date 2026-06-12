@@ -112,7 +112,7 @@ def cancel_order(
     db.commit()
     db.refresh(order)
 
-    publish_order_event("order_cancelled", {
+    publish_order_event("order_cancel", {
         "order_id": order.id,
         "user_id":  current_user["id"]
     })
