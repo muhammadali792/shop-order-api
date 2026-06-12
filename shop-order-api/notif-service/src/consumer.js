@@ -14,7 +14,7 @@ async function handleEvent(event, data) {
       await mailer.sendOrderCancellation(data);
       break;
     default:
-      logger.warn("Unknown event received", { event });
+      logger.warn("Unknown event receive", { event });
   }
 }
 
