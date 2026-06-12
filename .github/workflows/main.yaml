@@ -8,7 +8,6 @@ on:
       - 'shop-order-api/product-service/**'
       - 'shop-order-api/order-service/**'
       - 'shop-order-api/notif-service/**'
-  workflow_dispatch:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
