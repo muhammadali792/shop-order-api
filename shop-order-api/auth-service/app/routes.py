@@ -40,4 +40,4 @@ def get_me(current_user: models.User = Depends(auth.get_current_user)):
 def logout():
     # JWT stateless hai — client side token delete karo
     # Production mein token blacklist (Redis) use karo
-    return {"message": "Logg out successfully"}
+    return {"message": "Logg out successfull"}
