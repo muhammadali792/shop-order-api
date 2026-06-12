@@ -52,8 +52,8 @@ jobs:
         if: steps.check_changes.outputs.changed == 'true'
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+          SEMVER_TAG: "v1.0.${{ github.run_number }}"
         run: |
           cd shop-order-api/${{ matrix.service.folder }}
-          docker build -t $ECR_REGISTRY/${{ matrix.service.ecr_repo }}:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/${{ matrix.service.ecr_repo }}:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/${{ matrix.service.ecr_repo }}:$SEMVER_TAG .
+          docker push $ECR_REGISTRY/${{ matrix.service.ecr_repo }}:$SEMVER_TAG
