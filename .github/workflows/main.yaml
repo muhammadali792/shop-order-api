@@ -1,5 +1,4 @@
 name: Push Microservices
-
 on:
   push:
     branches:
@@ -10,7 +9,6 @@ on:
       - 'shop-order-api/order-service/**'
       - 'shop-order-api/notif-service/**'
   workflow_dispatch:
-
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -27,15 +25,32 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check if service changed
+        id: check_changes
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -q "shop-order-api/${{ matrix.service.folder }}/"; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Configure AWS Credentials
+        if: steps.check_changes.outputs.changed == 'true'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Login to Amazon ECR
+        if: steps.check_changes.outputs.changed == 'true'
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+
       - name: Build, Tag, and Push
+        if: steps.check_changes.outputs.changed == 'true'
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
