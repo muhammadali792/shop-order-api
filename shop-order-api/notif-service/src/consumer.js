@@ -7,7 +7,7 @@ const subscriber = new Redis(config.redisUrl);
 
 async function handleEvent(event, data) {
   switch (event) {
-    case "order_created":
+    case "order_create":
       await mailer.sendOrderConfirmation(data);
       break;
     case "order_cancelled":
