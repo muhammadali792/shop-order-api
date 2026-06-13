@@ -21,7 +21,7 @@ async function handleEvent(event, data) {
 function startConsumer() {
   subscriber.subscribe("order_events", (err, count) => {
     if (err) {
-      logger.error("Fail to subscribe to Redis channel", { error: err.message });
+      logger.error("Failed to subscribe to Redis channel", { error: err.message });
       process.exit(1);
     }
     logger.info(`Subscribed to ${count} Redis channel(s)`);
