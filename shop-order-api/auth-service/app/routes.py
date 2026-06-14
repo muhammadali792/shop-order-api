@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app import models, schemas, auth
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(prefix="", tags=["auth"])
 
 @router.post("/register", response_model=schemas.UserResponse, status_code=201)
 def register(payload: schemas.UserRegister, db: Session = Depends(get_db)):
