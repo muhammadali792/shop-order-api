@@ -9,7 +9,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title="Order Service",
     version="1.0.0",
-    docs_url="/orders/docs" if settings.app_env != "production" else None,
+    docs_url="/orders" if settings.app_env != "production" else None,
 )
 
 app.add_middleware(
