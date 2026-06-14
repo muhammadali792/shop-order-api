@@ -106,7 +106,7 @@ def cancel_order(
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
     if order.status != models.OrderStatus.pending:
-        raise HTTPException(status_code=400, detail="Only pending orders can be cancelled")
+        raise HTTPException(status_code=400, detail="Only pending orders can be cancel")
 
     order.status = models.OrderStatus.cancelled
     db.commit()
